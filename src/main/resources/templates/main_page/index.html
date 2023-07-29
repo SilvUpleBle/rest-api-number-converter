@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>NumberConverter</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+  </head>
+  <body>
+     <div class="container">
+      <form class="form-signin" method="GET" action="/convert">
+        <h2 class="form-signin-heading">NumberConverter</h2>
+        <br>
+        <div>
+            <h5 class="form-signin-heading">Language:</h5>
+            <input name="language" id="radio_rus" type="radio" value="rus" checked>
+            <label for="radio_rus">rus</label>
+            <br>
+            <input name="language" id="radio_eng" type="radio" value="eng">
+            <label for="radio_eng">eng</label>
+        </div>
+        <br>
+        <div>
+            <h5 class="form-signin-heading">Conversion type:</h5>
+            <input name="type" id="radio_num" type="radio" value="NumberToString" checked>
+            <label for="radio_num">NumberToString</label>
+            <br>
+            <input name="type" id="radio_str" type="radio" value="StringToNumber">
+            <label for="radio_str">StringToNumber</label>
+        </div>
+        <br>
+        <p>
+            <input type="text" id="value" name="value" class="form-control" placeholder="input your number or string" value="%s" required autofocus>
+        </p>
+        <p>
+            <textarea type="text" class="form-control" placeholder="output field">%s</textarea>
+        </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Input</button>
+      </form>
+</div>
+</body></html>
