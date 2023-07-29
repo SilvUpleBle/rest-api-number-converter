@@ -1,4 +1,4 @@
-package com.service.algorithm.request;
+package com.service.algorithm.db;
 
 public class Request {
     private Long id;
