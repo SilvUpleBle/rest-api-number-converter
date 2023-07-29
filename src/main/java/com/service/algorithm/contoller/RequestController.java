@@ -19,9 +19,27 @@ public class RequestController {
     }
 
     @GetMapping(path = "/convert")
-    public String getRequest(String language, String type, Long value) {
-        return getTextFromFile("src/main/resources/templates/main_page/index.html").formatted(value,
-                NumberConverter.numberToString(value));
+    public String getRequest(String language, String type, String value) {
+        try {
+            if (type.equals("NumberToString")) {
+                return getTextFromFile("src/main/resources/templates/main_page/index.html").formatted("checked", "",
+                        value,
+                        NumberConverter.numberToString(Long.parseLong(value)));
+            } else {
+                return getTextFromFile("src/main/resources/templates/main_page/index.html").formatted("", "checked",
+                        value,
+                        NumberConverter.stringToNumber(value));
+            }
+        } catch (Exception e) {
+            if (type.equals("NumberToString")) {
+                return getTextFromFile("src/main/resources/templates/main_page/index.html").formatted("checked", "",
+                        value, e.getMessage());
+            } else {
+                return getTextFromFile("src/main/resources/templates/main_page/index.html").formatted("", "checked",
+                        value, e.getMessage());
+            }
+
+        }
     }
 
     // TODO перенести в другой класс и сделать статичным
