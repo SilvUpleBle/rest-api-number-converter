@@ -1,0 +1,15 @@
+    CREATE TABLE users (
+            id SERIAL PRIMARY KEY,
+            username varchar(45) NOT NULL,
+            password varchar(45) NOT NULL,
+            enabled boolean NOT NULL DEFAULT TRUE   // особо смысла не имеет в таком проекте, но требуется для JdbcUserDetailsManager
+    );
+
+    CREATE TABLE authorities (
+            id SERIAL PRIMARY KEY,
+            username varchar(45) NOT NULL,      // по-хорошему, связать с users
+            authority varchar(45) NOT NULL      // ROLE_USER, ROLE_ADMIN и т.д.
+    );
+
+    INSERT INTO users(username, password) VALUES ('user', 'pass');
+    INSERT INTO authorities(username, authority) VALUES ('user', 'ROLE_USER');

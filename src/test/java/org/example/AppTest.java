@@ -29,11 +29,9 @@ public class AppTest {
     @Test
     public void test3() {
         try {
-
             Assertions.assertEquals(1,
                     NumberConverter.stringToNumber("сто двадцать один миллион две тысячи тринадцать"));
         } catch (Exception e) {
-            // TODO: handle exception
         }
     }
 }

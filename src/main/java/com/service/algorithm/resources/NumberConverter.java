@@ -72,11 +72,18 @@ public class NumberConverter {
                 };
             }
             default -> {
-                return "ошибка"; // TODO выбрасывать ошибку
+                return "ошибка";
             }
         }
     }
 
+
+    // разбивает пришедшие классы (1-3 цифры) по маске для последующего поиска в мапе
+    // пример:
+    // 763   214   5
+    // 7##   2##   ###
+    //  6#    14    ##
+    //   3     #     5
     private static char[][] parsNumberByDigits(Integer number) {
         char[][] digits = { { '#', '#', '#' }, { '#', '#' }, { '#' } };
 
@@ -113,29 +120,16 @@ public class NumberConverter {
         String[] stringForClass = new String[4];
 
         for (int i = 0; i < listOfClasses.size(); i++) {
-            stringForClass[0] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[0])); // записываем сотни
-            stringForClass[1] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[1])); // записываем
-                                                                                                     // десятки
+            stringForClass[0] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[0])); // записывает сотни
+            stringForClass[1] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[1])); // записывает десятки
 
-            if (listOfClasses.size() - i == 2
-                    && (listOfClasses.get(i)[2][0] == '1' || listOfClasses.get(i)[2][0] == '2'))
-                stringForClass[2] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[2]) + ".0"); // записываем
-                                                                                                                // единицы
-                                                                                                                // для
-                                                                                                                // тысяч
-                                                                                                                // (т.к.
-                                                                                                                // другой
-                                                                                                                // род)
+            if (listOfClasses.size() - i == 2 && (listOfClasses.get(i)[2][0] == '1' || listOfClasses.get(i)[2][0] == '2'))
+                stringForClass[2] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[2]) + ".0"); // записывает единицы для тысяч (т.к. другой род)
             else
-                stringForClass[2] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[2])); // записываем
-                                                                                                         // единицы в
-                                                                                                         // остальных
-                                                                                                         // случаях
+                stringForClass[2] = GlobalVars.numbersAndNames.get(new String(listOfClasses.get(i)[2])); // записывает единицы в остальных случаях
 
             stringForClass[3] = getNameOfClass(listOfClasses.size() - i,
-                    (int) (number / Math.pow(1000, listOfClasses.size() - i - 1) % 1000)); // записываем записываем
-                                                                                           // название класса тройки
-                                                                                           // чисел
+                    (int) (number / Math.pow(1000, listOfClasses.size() - i - 1) % 1000)); // записывает название класса тройки чисел
 
             for (int j = 0; j < 4; j++) {
                 if (stringForClass[j] != null) {
@@ -149,16 +143,18 @@ public class NumberConverter {
         return sb.toString();
     }
 
-    private static Long prepareNumberForStringToNumber(String str) throws IncorrectInputOrder {
+    private static Long prepareNumberForStringToNumber(String str) throws IncorrectInputOrder, InvalidValueException {
         try {
             Long number = 0L;
             Long buff = 0L;
             String[] words = str.split(" ");
             StringBuilder sb = new StringBuilder();
+            StringBuilder sb2 = new StringBuilder();
 
             for (String string : words) {
                 if (getKey(GlobalVars.numbersAndNames, string) != null) {
-                    sb.append(getKey(GlobalVars.numbersAndNames, string));
+                    sb.append(getKey(GlobalVars.numbersAndNames, string) + " ");
+                    sb2.append(string + " ");
 
                     // TODO в отдельный метод
                     for (int i = 0; i < sb.length(); i++) {
@@ -169,9 +165,15 @@ public class NumberConverter {
 
                     buff += (long) Double.parseDouble(sb.toString());
                 } else {
+                    sb2.append(string);
                     buff *= (long) Math.pow(1000, Integer.parseInt(getKey(GlobalVars.namesOfClasses, string)) / 10 - 1);
-                    number += buff;
-                    buff = 0L;
+                    if (sb2.toString().equals(numberToString(buff))) {
+                        number += buff;
+                        buff = 0L;
+                        sb2.setLength(0);
+                    } else {
+                        throw new InvalidValueException("Incorrect input. Expected: " + numberToString(buff) + ". Actual: " + sb2.toString() + ".");
+                    }
                 }
 
                 sb.setLength(0);
@@ -179,10 +181,11 @@ public class NumberConverter {
             number += buff;
 
             return number;
+        } catch (InvalidValueException e) {
+            throw e;
         } catch (Exception e) {
-            throw new IncorrectInputOrder("Incorrect input order");
+            throw new IncorrectInputOrder(e.getMessage());
         }
-
     }
 
     private static <K, V> K getKey(Map<K, V> map, V value) {
