@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +30,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        // TODO сделать .requestMatchers("/registration").permitAll()
+                        .requestMatchers("/registration").permitAll()
                         .requestMatchers("/convert").hasRole("USER") // в БД нужно указывать как "ROLE_USER"
                         .anyRequest().authenticated()
                 )
@@ -61,8 +60,7 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails userDetails = new 
-        return new JdbcUserDetailsManager(dataSource).createUser();
+        return new JdbcUserDetailsManager(dataSource);
     }
 
 }

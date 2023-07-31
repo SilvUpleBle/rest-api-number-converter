@@ -27,8 +27,7 @@ public class Log {
     public Log() {
     }
 
-    public Log(Long id, String username, String convertationType, String inner_value, String outer_value) {
-        this.id = id;
+    public Log(String username, String convertationType, String inner_value, String outer_value) {
         this.username = username;
         this.convertationType = convertationType;
         this.inner_value = inner_value;
@@ -90,5 +89,9 @@ public class Log {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public enum LogType {
+        INFO, ERROR, DEBUG
     }
 }

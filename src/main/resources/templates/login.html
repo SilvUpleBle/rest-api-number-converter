@@ -14,13 +14,12 @@
   <h2 class="form-signin-heading">Please sign in</h2>
   <p><div><input class="form-control" type="text" name="username" placeholder="Username"/></div></p>
   <p><div><input class="form-control" type="password" name="password" placeholder="Password"/></div></p>
-  <div th:if="${param.error}">
-    Invalid username and password.
-  </div>
-  <div th:if="${param.logout}">
-    You have been logged out.
-  </div>
+  <div th:if="${param.error}"><label>Invalid username and password.</label></div>
+  <div th:if="${param.logout}"><label>You have been logged out.</label></div>
   <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In"/></div>
+</form>
+<form class="form-signin" action="/registration" method="GET">
+  <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Registration"/></div>
 </form>
 </body>
 </html>

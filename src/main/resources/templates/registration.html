@@ -10,14 +10,18 @@
   <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
 </head>
 <body>
-<form class="form-signin" th:action="@{/login}" method="post">
+<form class="form-signin" method="GET" action="/registration">
   <h2 class="form-signin-heading">Please sign in</h2>
-  <p><div><input class="form-control" type="text" name="username" placeholder="Username"/></div></p>
-  <p><div><input class="form-control" type="password" name="password" placeholder="Password"/></div></p>
-  <div th:if="${param.error}">
-    Invalid username and password.
+  <p><div><input class="form-control" type="text" id="username" name="username" placeholder="Username" th:value="${username}" required/></div></p>
+  <p><div><input class="form-control" type="password" id="password" name="password" placeholder="Password" required/></div></p>
+  <p><div><input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required/></div></p>
+  <div>
+    <label th:text="${message}"></label>
   </div>
-  <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In"/></div>
+  <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign up"/></div>
+</form>
+<form class="form-signin" action="/login" method="post">
+  <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Back"/></div>
 </form>
 </body>
 </html>
