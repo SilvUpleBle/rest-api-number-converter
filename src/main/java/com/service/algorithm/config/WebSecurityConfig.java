@@ -44,6 +44,8 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+//    для работы JdbcUserDetailsManager без создания новых запросов необходимы таблицы с полями, как в этих запросах
+//    либо использовать подключения через Hibernate (чем я и воспользовался)
 //    CREATE TABLE users (
 //            id SERIAL PRIMARY KEY,
 //            username varchar(45) NOT NULL,
@@ -56,8 +58,6 @@ public class WebSecurityConfig {
 //            username varchar(45) NOT NULL,
 //            authority varchar(45) NOT NULL
 //    );
-//    нужны две эти таблицы, чтобы не пересоздавать sql запросы для JdbcUserDetailsManager
-
     @Bean
     public UserDetailsService userDetailsService() {
         return new JdbcUserDetailsManager(dataSource);

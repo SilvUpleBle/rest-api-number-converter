@@ -49,8 +49,8 @@ public class RequestController {
             return modelAndView;
         }
 
-        if (username.length() < 4) {
-            modelAndView.addObject("message", "Username must be more than 4 characters!");
+        if (username.length() < 4 || username.length() > 30) {
+            modelAndView.addObject("message", "Username must be more than 4 and less than 30 characters!");
             return modelAndView;
         }
         if (!password.equals(confirmPassword)) {
@@ -58,9 +58,9 @@ public class RequestController {
             modelAndView.addObject("message", "Passwords don`t match!");
             return modelAndView;
         }
-        if (password.length() < 6) {
+        if (password.length() < 6 || password.length() > 30) {
             modelAndView.addObject("username", username);
-            modelAndView.addObject("message", "Password must be more than 6 characters!");
+            modelAndView.addObject("message", "Password must be more than 6 and less than 30 characters!");
             return modelAndView;
         }
         if (userRepo.findByUsername(username) != null) {
@@ -76,6 +76,7 @@ public class RequestController {
         modelAndView.addObject("message", "User %s successfully saved!".formatted(username));
         return modelAndView;
     }
+
     @GetMapping("/convert")
     public ModelAndView getRequest(String type, String value, Authentication auth) {
         if(value == null) {
@@ -95,7 +96,9 @@ public class RequestController {
                 modelAndView.addObject("numberToStringChecked", true);
                 Long num;
                 if (value.length() > 12) {
-                    throw new InvalidValueException("Сonverter works with numbers up to and including 12 digits.");
+                    if (value.length() > 13 && value.charAt(0) != '-') {
+                        throw new InvalidValueException("Сonverter works with numbers up to and including 12 digits.");
+                    }
                 }
                 try {
                     num = Long.parseLong(value);
