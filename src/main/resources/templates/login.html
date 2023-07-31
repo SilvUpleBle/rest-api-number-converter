@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Login</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+</head>
+<body>
+<form class="form-signin" th:action="@{/login}" method="post">
+  <h2 class="form-signin-heading">Please sign in</h2>
+  <p><div><input class="form-control" type="text" name="username" placeholder="Username"/></div></p>
+  <p><div><input class="form-control" type="password" name="password" placeholder="Password"/></div></p>
+  <div th:if="${param.error}"><label>Invalid username and password.</label></div>
+  <div th:if="${param.logout}"><label>You have been logged out.</label></div>
+  <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In"/></div>
+</form>
+<form class="form-signin" action="/registration" method="GET">
+  <div><input class="btn btn-lg btn-primary btn-block" type="submit" value="Registration"/></div>
+</form>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,34 +11,37 @@
   </head>
   <body>
      <div class="container">
-      <form class="form-signin" method="GET" action="/convert">
+         <form class="form-signin" method="GET" action="/convert">
         <h2 class="form-signin-heading">NumberConverter</h2>
         <br>
         <div>
             <h5 class="form-signin-heading">Language:</h5>
-            <input name="language" id="radio_rus" type="radio" value="rus" checked>
+            <input name="language" id="radio_rus" type="radio" value="rus" checked disabled>
             <label for="radio_rus">rus</label>
             <br>
-            <input name="language" id="radio_eng" type="radio" value="eng">
+            <input name="language" id="radio_eng" type="radio" value="eng" disabled>
             <label for="radio_eng">eng</label>
         </div>
         <br>
         <div>
             <h5 class="form-signin-heading">Conversion type:</h5>
-            <input name="type" id="radio_num" type="radio" value="NumberToString" %s>
+            <input name="type" id="radio_num" type="radio" value="NumberToString" th:checked="${numberToStringChecked}">
             <label for="radio_num">NumberToString</label>
             <br>
-            <input name="type" id="radio_str" type="radio" value="StringToNumber" %s>
+            <input name="type" id="radio_str" type="radio" value="StringToNumber" th:checked="${stringToNumberChecked}">
             <label for="radio_str">StringToNumber</label>
         </div>
         <br>
         <p>
-            <input type="text" id="value" name="value" class="form-control" placeholder="input your number or string" value="%s" required autofocus>
+            <textarea type="text" id="value" name="value" class="form-control" placeholder="input your number or string" th:text="${input}" required autofocus></textarea>
         </p>
         <p>
-            <textarea type="text" class="form-control" placeholder="output field">%s</textarea>
+            <textarea type="text" class="form-control" placeholder="output field" th:text="${output}"></textarea>
         </p>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Input</button>
+      </form>
+      <form class="form-signin" th:action="@{/logout}" method="post">
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign Out"/>
       </form>
 </div>
 </body></html>
