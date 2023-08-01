@@ -260,7 +260,7 @@ public class NumberConverter {
         }
     }
 
-    // проверка на правильность написания слов
+    // проверка на правильность написания слов (две тысяч -> ошибка)
     private static void checkForCorrectInputOfWords (String string, Long number) throws NumberOutOfRangeException, InvalidValueException {
         if (!string.equals(numberToString(number))) {
             throw new InvalidValueException("Incorrect input. Expected: " + numberToString(number) + ". Actual: " + string + ".");

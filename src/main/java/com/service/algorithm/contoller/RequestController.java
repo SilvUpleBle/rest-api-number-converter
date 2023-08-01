@@ -1,9 +1,5 @@
 package com.service.algorithm.contoller;
 
-import java.sql.Timestamp;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-
 import com.service.algorithm.database.model.Authority;
 import com.service.algorithm.database.model.Log;
 import com.service.algorithm.database.model.User;
@@ -48,9 +44,8 @@ public class RequestController {
         if (username == null && password == null && confirmPassword == null) {
             return modelAndView;
         }
-
         if (username.length() < 4 || username.length() > 30) {
-            modelAndView.addObject("message", "Username must be more than 4 and less than 30 characters!");
+            modelAndView.addObject("message", "Username must be more than 3 and less than 30 characters!");
             return modelAndView;
         }
         if (!password.equals(confirmPassword)) {
@@ -60,7 +55,7 @@ public class RequestController {
         }
         if (password.length() < 6 || password.length() > 30) {
             modelAndView.addObject("username", username);
-            modelAndView.addObject("message", "Password must be more than 6 and less than 30 characters!");
+            modelAndView.addObject("message", "Password must be more than 5 and less than 30 characters!");
             return modelAndView;
         }
         if (userRepo.findByUsername(username) != null) {
@@ -117,7 +112,6 @@ public class RequestController {
             modelAndView.addObject("output", "[Error] " + e.getMessage());
             log.setLogType(Log.LogType.ERROR);
             log.setOuter_value(e.getMessage());
-            e.printStackTrace();
         }
         logRepo.save(log);
         return modelAndView;

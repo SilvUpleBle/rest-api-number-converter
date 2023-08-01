@@ -151,4 +151,12 @@ public class AppTest {
         } catch (Exception e) {
         }
     }
+
+    @Test
+    public void test18() {
+        try {
+            Assertions.assertEquals(0L, NumberConverter.stringToNumber("ноль"));
+        } catch (Exception e) {
+        }
+    }
 }
