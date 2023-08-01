@@ -1,14 +1,13 @@
 package com.service.algorithm.database.model;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
@@ -22,7 +21,8 @@ public class User implements UserDetails {
 
     public User(String username, String password, boolean enabled) {
         this.username = username;
-        this.password = password;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
+        this.password = encoder.encode(password);
         this.enabled = enabled;
     }
 
@@ -38,28 +38,8 @@ public class User implements UserDetails {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
     }
 
     public String getPassword() {
@@ -67,7 +47,8 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
+        this.password = encoder.encode(password);
     }
 
     public boolean isEnabled() {

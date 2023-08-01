@@ -96,7 +96,7 @@ public class NumberConverter {
     //  6#    14    ##
     //   3     #     5
     // '0' добавляется к каждому число, чтобы корректно записать в char
-    private static char[][] parsNumberByDigits(Integer number) {
+    private static char[][] parseNumberByDigits(Integer number) {
         char[][] digits = { { '#', '#', '#' }, { '#', '#' }, { '#' } };
 
         if (number > 99)
@@ -109,8 +109,11 @@ public class NumberConverter {
             digits[1][1] = (char) (number % 10 + '0');
         }
 
-        if (digits[1][1] == '#' && (number % 10) != 0)
-            digits[2][0] = (char) (number % 10 + '0');
+        if (digits[1][1] == '#')
+            if ((number % 10) != 0)
+                digits[2][0] = (char) (number % 10 + '0');
+            else if (digits[1][0] == '#' && digits[0][0] == '#')
+                digits[2][0] = (char) (number % 10 + '0');
 
         return digits;
     }
@@ -119,11 +122,16 @@ public class NumberConverter {
     private static LinkedList<char[][]> parseNumberByClasses(Long number) {
         LinkedList<char[][]> list = new LinkedList<>();
         do {
-            list.add(parsNumberByDigits((int) (number % 1000)));
+            list.add(parseNumberByDigits((int) (number % 1000)));
             number /= 1000;
         } while (number > 0);
 
         Collections.reverse(list); // переворачиваем лист, чтобы начать записывать в StrBuilder с высшего класса
+        if (list.size() > 1)
+            for (int i = 0; i < list.size(); i++) {
+                if (Arrays.deepEquals(list.get(i), new char[][]{{'#','#','#'},{'#','#'},{'0'}}))
+                    list.set(i, new char[][]{{'#','#','#'},{'#','#'},{'#'}});
+            }
         return list;
     }
 
@@ -167,9 +175,12 @@ public class NumberConverter {
 
         for (String string : str.split(" ")) {
             if (getKey(GlobalVars.numbersAndNames, string) != null) {
-                sb.append(getKey(GlobalVars.numbersAndNames, string));
-                sb = replaceAll(sb, "#", "0");
+                // проверка на то, чтобы не приходил ноль после другого разряда (пятьдесят ноль -> ошибка)
+                if (((classesFlag.get(3) || classesFlag.get(2) || classesFlag.get(1)) || (digitsFlag.get(2) || digitsFlag.get(1))) && string.equals("ноль")) {
+                    throw new InvalidValueException("Incorrect input! There should not be a zero after any digit!");
+                }
 
+                sb.append((int) Double.parseDouble(getKey(GlobalVars.numbersAndNames, string).replace('#', '0')));
                 checkDigitsForCorrectInput(digitsFlag, sb.length() - 1);
                 digitsFlag.set(sb.length() - 1, true);
 
@@ -188,18 +199,16 @@ public class NumberConverter {
                 classesFlag.set(classNumber - 1, true);
 
                 buff *= (long) Math.pow(1000, classNumber - 1);
-                if (sb2.toString().equals(numberToString(buff))) {
-                    number += buff;
-                    buff = 0L;
-                    sb2.setLength(0);
-                    digitsFlag = Arrays.asList(false, false, false);
-                } else {
-                    throw new InvalidValueException("Incorrect input. Expected: " + numberToString(buff) + ". Actual: " + sb2 + ".");
-                }
+                number += buff;
+                buff = 0L;
+                sb2.append(" ");
+                digitsFlag = Arrays.asList(false, false, false);
             }
             sb.setLength(0);
         }
         number += buff;
+        sb2.deleteCharAt(sb2.length() - 1);
+        checkForCorrectInputOfWords(sb2.toString(), number);
         return number;
     }
 
@@ -248,6 +257,13 @@ public class NumberConverter {
             }
         } else {
             throw new IncorrectInputOrderException("Incorrect input order! The digits should not be repeated.");
+        }
+    }
+
+    // проверка на правильность написания слов
+    private static void checkForCorrectInputOfWords (String string, Long number) throws NumberOutOfRangeException, InvalidValueException {
+        if (!string.equals(numberToString(number))) {
+            throw new InvalidValueException("Incorrect input. Expected: " + numberToString(number) + ". Actual: " + string + ".");
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.service.algorithm.database.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "authorities")

@@ -117,9 +117,8 @@ public class RequestController {
             modelAndView.addObject("output", "[Error] " + e.getMessage());
             log.setLogType(Log.LogType.ERROR);
             log.setOuter_value(e.getMessage());
+            e.printStackTrace();
         }
-        OffsetDateTime offsetDateTime = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("Europe/Moscow")).toOffsetDateTime();
-        log.setCreateTime(Timestamp.valueOf(offsetDateTime.toLocalDateTime()));
         logRepo.save(log);
         return modelAndView;
     }

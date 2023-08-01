@@ -104,7 +104,7 @@ public class AppTest {
 
     // здесь ошибка придёт с сообщением о том, что нельзя записывать название класса без числа перед ним
     @Test
-    public void test13() {
+    public void test12() {
         try {
             Assertions.assertEquals(new IncorrectInputOrderException(), NumberConverter.stringToNumber("тысяча сто"));
         } catch (Exception e) {
@@ -113,9 +113,41 @@ public class AppTest {
 
     // здесь ошибка придёт с сообщением о том, что число превышает 12 разрядов
     @Test
-    public void test12() {
+    public void test13() {
         try {
             Assertions.assertEquals(new NumberOutOfRangeException(), NumberConverter.numberToString(1234567891011L));
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    public void test14() {
+        try {
+            Assertions.assertEquals(504L, NumberConverter.stringToNumber("пятьсот четыре"));
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    public void test15() {
+        try {
+            Assertions.assertEquals(203L, NumberConverter.stringToNumber("двести три"));
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    public void test16() {
+        try {
+            Assertions.assertEquals(1_000_001L, NumberConverter.stringToNumber("один миллион один"));
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    public void test17() {
+        try {
+            Assertions.assertEquals(new InvalidValueException(), NumberConverter.stringToNumber("миллион один"));
         } catch (Exception e) {
         }
     }
